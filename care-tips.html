@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exquisite - Care & Tips</title>
+    <!-- Preload the first hero image -->
+    <link rel="preload" href="care-hero.webp" as="image">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Social Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* CSS Variables for Colors (Exquisite's Pink Palette with Cosmic Accents) */
+        :root {
+            --bg-primary: #FFF5F8; /* Light Pinkish White */
+            --bg-secondary: #FFE4E1; /* Misty Rose for sections */
+            --accent-primary: #FF1493; /* Deep Pink */
+            --accent-secondary: #FF69B4; /* Hot Pink for accents */
+            --cosmic-gold: #D4AF37; /* Gold for accents */
+            --text-primary: #1A1A1A; /* Dark Gray for main text */
+            --text-secondary: #4A4A4A; /* Medium Gray for secondary text */
+            --success: #00FF7F; /* Neon Green for success */
+            --error: #FF4040; /* Neon Red for errors */
+            --footer-bg: #FFEBF0; /* Softer Pink for Footer */
+        }
+        .dark-mode {
+            --bg-primary: #1A1A1A; /* Dark Gray for modern base */
+            --bg-secondary: #2C2C2C; /* Slightly lighter gray for sections */
+            --accent-primary: #FF1493;
+            --accent-secondary: #FF69B4;
+            --cosmic-gold: #D4AF37;
+            --text-primary: #FFFFFF; /* White for main text */
+            --text-secondary: #D3D3D3; /* Light Gray for secondary text */
+            --success: #00FF7F;
+            --error: #FF4040;
+            --footer-bg: #2C2C2C;
+        }
+
+        /* General Styles */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Raleway', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            scroll-behavior: smooth;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Cosmic Particle Background */
+        #particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(135deg, #1A1A1A, #2C2C2C);
+        }
+
+        /* Content Wrapper for Blur Effect */
+        .content-wrapper {
+            transition: filter 0.3s ease;
+        }
+        .content-wrapper.nav-open {
+            filter: blur(3px);
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(255, 245, 248, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        header.shrink { transform: scale(0.98); }
+        .top-bar {
+            background: var(--accent-primary);
+            color: #FFFFFF;
+            text-align: center;
+            padding: 0.5rem;
+            font-size: 0.9rem;
+            text-shadow: 0 0 5px var(--accent-primary), 0 0 10px var(--accent-primary);
+        }
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            text-shadow: 0 0 10px var(--accent-primary);
+        }
+        .search-nav {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        .search-bar {
+            position: relative;
+            flex: 1;
+            max-width: 400px;
+        }
+        .search-bar input {
+            width: 100%;
+            padding: 0.5rem 2rem 0.5rem 1rem;
+            border: 1px solid var(--accent-secondary);
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--text-primary);
+            transition: box-shadow 0.3s;
+        }
+        .search-bar input:focus {
+            box-shadow: 0 0 10px var(--accent-primary);
+            outline: none;
+        }
+        .search-bar::after {
+            content: '🔍';
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+        nav { display: flex; gap: 1.5rem; position: relative; }
+        nav a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            padding: 0.2rem 0;
+            transition: color 0.3s, text-shadow 0.3s;
+        }
+        /* Desktop Nav Hover Effect */
+        @media (min-width: 769px) {
+            nav a::before {
+                content: '';
+                position: absolute;
+                bottom: -2px;
+                left: 0;
+                width: 0;
+                height: 2px;
+                background: linear-gradient(90deg, var(--accent-primary), var(--cosmic-gold));
+                transition: width 0.4s ease;
+            }
+            nav a:hover::before {
+                width: 100%;
+            }
+            nav a:hover {
+                color: var(--cosmic-gold);
+                text-shadow: 0 0 10px var(--cosmic-gold);
+            }
+            nav a::after {
+                content: '';
+                position: absolute;
+                top: 50%;
+                left: 0;
+                width: 0;
+                height: 100%;
+                background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><circle cx="5" cy="5" r="2" fill="%23D4AF37" opacity="0.5"/></svg>') repeat-x;
+                background-size: 10px;
+                opacity: 0;
+                transition: width 0.4s ease, opacity 0.2s ease;
+                pointer-events: none;
+            }
+            nav a:hover::after {
+                width: 100%;
+                opacity: 1;
+                animation: particleTrail 1s infinite;
+            }
+        }
+        @keyframes particleTrail {
+            0% { background-position: 0 0; }
+            100% { background-position: 100px 0; }
+        }
+        .header-icons { display: flex; gap: 1rem; align-items: center; }
+        .cart-icon { position: relative; cursor: pointer; font-size: 1.2rem; color: var(--text-primary); }
+        .cart-icon:hover { color: var(--cosmic-gold); text-shadow: 0 0 10px var(--cosmic-gold); }
+        #cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--accent-primary);
+            color: #FFFFFF;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.7rem;
+            box-shadow: 0 0 5px var(--accent-primary);
+        }
+        #dark-mode-toggle { cursor: pointer; font-size: 1.2rem; color: var(--text-primary); }
+        #dark-mode-toggle:hover { color: var(--cosmic-gold); text-shadow: 0 0 10px var(--cosmic-gold); }
+        .hamburger { display: none; font-size: 1.5rem; cursor: pointer; color: var(--text-primary); }
+        .hamburger:hover { color: var(--cosmic-gold); text-shadow: 0 0 10px var(--cosmic-gold); }
+        .nav-header {
+            display: none;
+        }
+
+        /* Hero Section with Adjusted Spacing */
+        .hero {
+            position: relative;
+            height: 600px;
+            overflow: hidden;
+            text-align: center;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            margin-top: 120px; /* Reduced spacing for desktop */
+        }
+        .hero-carousel {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        .hero-slide {
+            position: absolute;
+            top: 0;
+            left: 100%;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: left 0.5s ease, opacity 0.5s ease;
+        }
+        .hero-slide.active {
+            left: 0;
+            opacity: 1;
+        }
+        .hero-slide picture img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            animation: zoomIn 1.5s ease-in-out;
+            transition: transform 0.3s ease;
+        }
+        @keyframes zoomIn {
+            0% { transform: scale(1.2); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .hero-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #FFFFFF;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            width: 90%;
+            max-width: 600px;
+        }
+        .hero-content h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            animation: heartbeat 2s infinite;
+            text-shadow: 0 0 20px var(--cosmic-gold);
+        }
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            animation: slideInRight 1s ease-in-out 0.3s;
+            animation-fill-mode: both;
+        }
+        @keyframes slideInRight {
+            0% { transform: translateX(100%); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Main Content */
+        main { padding: 2rem; }
+        .section {
+            position: relative;
+            margin: 3rem 0;
+            background: var(--bg-secondary);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(255, 20, 147, 0.1), rgba(255, 215, 0, 0.1));
+            opacity: 0.5;
+            z-index: -1;
+            animation: auroraShift 10s infinite;
+        }
+        @keyframes auroraShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .care-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--accent-primary);
+            text-shadow: 0 0 10px var(--cosmic-gold);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        .care-tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        .tip-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.5s ease, box-shadow 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .tip-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 0 30px var(--cosmic-gold);
+        }
+        .tip-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.2) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.5s;
+            pointer-events: none;
+        }
+        .tip-card:hover::before {
+            opacity: 1;
+        }
+        .tip-card .image-wrapper {
+            position: relative;
+            width: 100%;
+            padding-top: 75%; /* 4:3 aspect ratio */
+        }
+        .tip-card img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 5px;
+            transition: transform 0.3s;
+        }
+        .tip-card:hover img {
+            transform: scale(1.05);
+        }
+        .tip-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin: 1rem 0 0.5rem;
+            color: var(--accent-primary);
+            text-shadow: 0 0 5px var(--cosmic-gold);
+        }
+        .tip-card p {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        /* Footer with Gradient Header Text */
+        footer {
+            background: var(--footer-bg);
+            padding: 3rem 1rem;
+            position: relative;
+            border-top: 5px solid var(--cosmic-gold);
+            margin-top: 3rem;
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.2);
+        }
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, var(--accent-secondary), var(--cosmic-gold));
+            opacity: 0.1;
+            z-index: -1;
+        }
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(5px);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+        footer h3 {
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+            background: linear-gradient(to right, var(--accent-primary), var(--cosmic-gold));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+        footer p, footer a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin: 0.5rem 0;
+            transition: all 0.3s ease;
+        }
+        a:not(nav a):hover {
+            background: linear-gradient(to right, var(--accent-primary), var(--cosmic-gold));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px var(--cosmic-gold);
+            transform: scale(1.05);
+        }
+        footer p i { margin-right: 0.5rem; color: var(--accent-primary); }
+        footer form { display: flex; flex-direction: column; gap: 0.5rem; }
+        footer input, footer textarea {
+            padding: 0.5rem;
+            border: 1px solid var(--cosmic-gold);
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            transition: box-shadow 0.3s;
+        }
+        footer input:focus, footer textarea:focus {
+            box-shadow: 0 0 10px var(--cosmic-gold);
+            outline: none;
+        }
+        footer button {
+            background: linear-gradient(45deg, var(--accent-primary), var(--cosmic-gold));
+            color: #FFFFFF;
+            border: none;
+            padding: 0.5rem;
+            cursor: pointer;
+            border-radius: 5px;
+            box-shadow: 0 0 10px var(--cosmic-gold);
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+        footer button:hover {
+            background: linear-gradient(45deg, var(--cosmic-gold), var(--accent-primary));
+            box-shadow: 0 0 20px var(--cosmic-gold);
+        }
+        .form-message { text-align: center; margin-top: 0.5rem; }
+        .success { color: var(--success); text-shadow: 0 0 5px var(--success); }
+        .error { color: var(--error); text-shadow: 0 0 5px var(--error); }
+        .social-icons { display: flex; gap: 1rem; }
+        .social-icons a {
+            font-size: 1.8rem;
+            color: var(--text-secondary);
+            transition: transform 0.3s, color 0.3s, text-shadow 0.3s;
+        }
+        .social-icons a:hover {
+            color: var(--cosmic-gold);
+            transform: scale(1.2);
+            text-shadow: 0 0 10px var(--cosmic-gold);
+        }
+        .back-to-top {
+            text-align: center;
+            margin-top: 2rem;
+        }
+        .back-to-top a {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(45deg, var(--accent-primary), var(--cosmic-gold));
+            color: #FFFFFF;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 0 10px var(--cosmic-gold);
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+        .back-to-top a:hover {
+            background: linear-gradient(45deg, var(--cosmic-gold), var(--accent-primary));
+            box-shadow: 0 0 20px var(--cosmic-gold);
+        }
+
+        /* Improved Responsiveness */
+        @media (max-width: 1200px) {
+            .main-header { padding: 1rem 1.5rem; }
+            .logo { font-size: 2rem; }
+            .search-bar { max-width: 350px; }
+            .hero { height: 500px; margin-top: 110px; }
+            .hero-content h1 { font-size: 3rem; }
+            .hero-content p { font-size: 1.1rem; }
+            .care-tips-grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.2rem; }
+        }
+
+        @media (max-width: 1024px) {
+            .main-header { padding: 1rem; }
+            .logo { font-size: 1.8rem; }
+            .search-bar { max-width: 300px; }
+            .hero { height: 400px; margin-top: 100px; }
+            .hero-content h1 { font-size: 2.5rem; }
+            .hero-content p { font-size: 1rem; }
+            .care-tips-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+        }
+
+        @media (max-width: 768px) {
+            .main-header { flex-wrap: wrap; gap: 0.5rem; padding: 0.5rem 1rem; }
+            .logo { font-size: 1.5rem; }
+            .search-nav { width: 100%; justify-content: space-between; gap: 0.5rem; }
+            .search-bar { max-width: 100%; flex: 1; }
+            .search-bar input { padding: 0.4rem 1.5rem 0.4rem 0.8rem; font-size: 0.9rem; }
+            nav {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: -70%;
+                width: 70%;
+                height: 100vh;
+                background: linear-gradient(135deg, var(--accent-primary), var(--cosmic-gold));
+                padding: 2rem 1rem;
+                box-shadow: 2px 0 15px rgba(0, 0, 0, 0.3);
+                transition: left 0.3s ease;
+                z-index: 1001;
+                overflow-y: auto;
+            }
+            nav.active { display: block; left: 0; }
+            .nav-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+            nav .nav-header h3 { font-size: 1.5rem; font-weight: 700; color: #FFFFFF; text-shadow: 0 0 10px var(--cosmic-gold); }
+            nav .close-nav { font-size: 1.5rem; color: #FFFFFF; cursor: pointer; transition: transform 0.3s, text-shadow 0.3s; }
+            nav .close-nav:hover { transform: rotate(90deg); text-shadow: 0 0 10px var(--cosmic-gold); }
+            nav a {
+                display: block;
+                margin: 1.5rem 0;
+                font-size: 1.2rem;
+                color: #FFFFFF;
+                text-shadow: 0 0 5px var(--cosmic-gold);
+                padding: 0.5rem 1rem;
+                border-radius: 5px;
+                background: rgba(82, 82, 80, 0.16);
+                transition: transform 0.3s, background 0.3s, text-shadow 0.3s;
+                opacity: 0;
+                transform: translateX(-20px);
+                animation: slideInNav 0.5s forwards;
+                animation-delay: calc(0.1s * var(--nav-index));
+            }
+            nav a:hover { background: rgba(255, 255, 255, 0.2); transform: translateX(10px); text-shadow: 0 0 15px var(--cosmic-gold); }
+            @keyframes slideInNav { to { opacity: 1; transform: translateX(0); } }
+            .hamburger { display: block; }
+            .header-icons { gap: 0.5rem; }
+            .cart-icon, #dark-mode-toggle { font-size: 1rem; }
+            #cart-count { font-size: 0.6rem; padding: 1px 4px; }
+            .hero { height: 300px; margin-top: 220px; }
+            .hero-content h1 { font-size: 1.8rem; }
+            .hero-content p { font-size: 0.9rem; }
+            main { padding: 1rem; }
+            .section { padding: 1.5rem; margin: 1.5rem 0; }
+            .care-section h2 { font-size: 1.5rem; }
+            .care-tips-grid { grid-template-columns: 1fr; gap: 1rem; }
+            .tip-card { padding: 1rem; }
+            .tip-card h3 { font-size: 1.2rem; }
+            .tip-card p { font-size: 0.9rem; }
+            footer { padding: 2rem 1rem; }
+            .footer-content { padding: 1rem; gap: 1rem; }
+            footer h3 { font-size: 1.1rem; }
+            footer p, footer a { font-size: 0.9rem; }
+            .social-icons a { font-size: 1.5rem; }
+            .back-to-top a { padding: 0.4rem 0.8rem; font-size: 0.9rem; }
+        }
+
+        @media (max-width: 480px) {
+            .main-header { padding: 0.5rem; }
+            .logo { font-size: 1.2rem; }
+            .search-bar input { font-size: 0.8rem; padding: 0.3rem 1rem 0.3rem 0.6rem; }
+            .hamburger { font-size: 1.2rem; }
+            .header-icons { gap: 0.3rem; }
+            .cart-icon, #dark-mode-toggle { font-size: 0.9rem; }
+            #cart-count { font-size: 0.5rem; padding: 1px 3px; }
+            .hero { height: 250px; margin-top: 200px; }
+            .hero-content h1 { font-size: 1.5rem; }
+            .hero-content p { font-size: 0.8rem; }
+            main { padding: 0.5rem; }
+            .section { padding: 1rem; margin: 1rem 0; }
+            .care-section h2 { font-size: 1.2rem; }
+            .care-tips-grid { grid-template-columns: 1fr; gap: 0.8rem; }
+            .tip-card { padding: 0.8rem; }
+            .tip-card h3 { font-size: 1rem; }
+            .tip-card p { font-size: 0.8rem; }
+            footer { padding: 1.5rem 0.5rem; }
+            .footer-content { padding: 0.5rem; gap: 0.5rem; }
+            footer h3 { font-size: 1rem; }
+            footer p, footer a { font-size: 0.8rem; }
+            .social-icons a { font-size: 1.2rem; }
+            .back-to-top a { padding: 0.3rem 0.6rem; font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Cosmic Particle Background -->
+    <canvas id="particles" width="412" height="915"></canvas>
+
+    <!-- Header -->
+    <header>
+        <div class="top-bar">✨ Free Shipping on Orders Over ₦10,000! ✨</div>
+        <div class="main-header">
+            <div class="logo">Exquisite</div>
+            <div class="search-nav">
+                <div class="search-bar">
+                    <input type="text" placeholder="Search for products...">
+                </div>
+                <span class="hamburger">☰</span>
+                <nav>
+                    <div class="nav-header">
+                        <h3>Exquisite</h3>
+                        <span class="close-nav">✖</span>
+                    </div>
+                    <a href="index.html" style="--nav-index: 1;">Home</a>
+                    <a href="about.html" style="--nav-index: 2;">About Us</a>
+                    <a href="shop.html" style="--nav-index: 3;">Shop</a>
+                    <a href="recipes.html" style="--nav-index: 4;">Recipes</a>
+                    <a href="care-tips.html" style="--nav-index: 5;">Care & Tips</a>
+                    <a href="blog.html" style="--nav-index: 6;">Blog</a>
+                    <a href="community.html" style="--nav-index: 7;">Community</a>
+                    <a href="contact.html" style="--nav-index: 8;">Contact Us</a>
+                </nav>
+            </div>
+            <div class="header-icons">
+                <div class="cart-icon">🛒 <span id="cart-count">0</span></div>
+                <span id="dark-mode-toggle">🌙</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Content Wrapper -->
+    <div class="content-wrapper">
+        <!-- Main Content -->
+        <main>
+            <section class="hero">
+                <div class="hero-carousel">
+                    <div class="hero-slide active">
+                        <picture>
+                            <source srcset="care and tips.jpg" type="image/jpg">
+                            <img src="care and tips.jpg" alt="Care & Tips Hero" width="1200" height="500">
+                        </picture>
+                    </div>
+                </div>
+                <div class="hero-content">
+                    <h1>Care & Tips</h1>
+                    <p>Learn how to keep your Exquisite products in perfect condition!</p>
+                </div>
+            </section>
+
+            <!-- Cake Care Section -->
+            <section class="care-section section">
+                <h2>Cake Care Tips</h2>
+                <div class="care-tips-grid">
+                    <div class="tip-card">
+                        <div class="image-wrapper">
+                            <img src="Cake Storage.jpg" alt="Cake Storage" loading="lazy">
+                        </div>
+                        <h3>Storage</h3>
+                        <p>Store your cake in a cool, dry place away from direct sunlight. For best freshness, keep it in an airtight container and refrigerate if not consuming within 24 hours.</p>
+                    </div>
+                    <div class="tip-card">
+                        <div class="image-wrapper">
+                            <img src="Cake Serving.jpg" alt="Cake Serving" loading="lazy">
+                        </div>
+                        <h3>Serving</h3>
+                        <p>Let the cake sit at room temperature for 30 minutes before serving to enhance its flavor. Use a sharp knife dipped in hot water for clean slices.</p>
+                    </div>
+                    <div class="tip-card">
+                        <div class="image-wrapper">
+                            <img src="Cake Freezing.jpg" alt="Cake Freezing" loading="lazy">
+                        </div>
+                        <h3>Freezing</h3>
+                        <p>Wrap individual slices in plastic wrap and place them in a freezer-safe bag. Freeze for up to 3 months. Thaw in the fridge overnight before enjoying.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Lip Gloss Care Section -->
+            <section class="care-section section">
+                <h2>Lip Gloss Care Tips</h2>
+                <div class="care-tips-grid">
+                    <div class="tip-card">
+                        <div class="image-wrapper">
+                            <img src="lip gloss storage.jpg" alt="Lip Gloss Storage" loading="lazy">
+                        </div>
+                        <h3>Storage</h3>
+                        <p>Keep your lip gloss in a cool, dry place away from heat sources. Avoid leaving it in direct sunlight or hot environments to prevent melting.</p>
+                    </div>
+                    <div class="tip-card">
+                        <div class="image-wrapper">
+                            <img src="Lip Application.jpg" alt="Lip Gloss Application" loading="lazy">
+                        </div>
+                        <h3>Application</h3>
+                        <p>Apply on clean, exfoliated lips for a smooth finish. Use a lip liner for precision, and avoid over-applying to prevent stickiness.</p>
+                    </div>
+                    <div class="tip-card">
+                        <div class="image-wrapper">
+                            <img src="lip gloss cleaning.jpg" alt="Lip Gloss Cleaning" loading="lazy">
+                        </div>
+                        <h3>Cleaning</h3>
+                        <p>Wipe the applicator with a clean tissue after each use to prevent bacteria buildup. If the gloss thickens, gently warm the tube in your hands to restore its texture.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Face Sheet Care Section -->
+            <section class="care-section section">
+                <h2>Face Sheet Care Tips</h2>
+                <div class="care-tips-grid">
+                    <div class="tip-card">
+                        <div class="image-wrapper">
+                            <img src="face sheets storage .jpg"Face Sheet Storage" loading="lazy">
+                        </div>
+                        <h3>Storage</h3>
+                        <p>Store face sheets in a cool, dry place. Keep them sealed in their packaging to maintain moisture and prevent drying out.</p>
+                    </div>
+                    <div class="tip-card">
+                        <div class="image-wrapper">
+                            <img src="face sheets applicationjpg.jpg" alt="Face Sheet Application" loading="lazy">
+                        </div>
+                        <h3>Application</h3>
+                        <p>Apply on a clean face after cleansing. Leave the sheet on for 15-20 minutes, then remove and massage the remaining essence into your skin.</p>
+                    </div>
+                    <div class="tip-card">
+                        <div class="image-wrapper">
+                            <img src="face sheets aftercare.jpg" alt="Face Sheet Aftercare" loading="lazy">
+                        </div>
+                        <h3>Aftercare</h3>
+                        <p>Follow up with a moisturizer to lock in hydration. Avoid rinsing your face after use to maximize the benefits of the essence.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer>
+            <div class="footer-content">
+                <div>
+                    <h3>Exquisite</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> 12 Exquisite Lane, Lagos State, Nigeria</p>
+                    <p><i class="fas fa-globe"></i> We ship across Nigeria!</p>
+                    <p><i class="fas fa-phone-alt"></i> +234 801 234 5678</p>
+                    <p><i class="fas fa-envelope"></i> hello@exquisite.ng</p>
+                    <p><i class="fas fa-clock"></i> Mon-Fri: 9am-6pm, Sat: 10am-4pm (WAT)</p>
+                </div>
+                <div>
+                    <h3>Quick Links</h3>
+                    <p><a href="index.html">Home</a></p>
+                    <p><a href="shop.html">Shop</a></p>
+                    <p><a href="recipes.html">Recipes</a></p>
+                    <p><a href="care-tips.html">Care & Tips</a></p>
+                    <p><a href="blog.html">Blog</a></p>
+                    <p><a href="community.html">Community</a></p>
+                    <p><a href="contact.html">Contact Us</a></p>
+                </div>
+                <div>
+                    <h3>Explore More</h3>
+                    <p><a href="#">Flavor Quiz</a></p>
+                    <p><a href="#">Lookbook</a></p>
+                    <p><a href="#">Customer Stories</a></p>
+                    <p><a href="#">Newsletter Signup</a></p>
+                </div>
+                <div>
+                    <h3>Follow Us</h3>
+                    <div class="social-icons">
+                        <a href="https://tiktok.com/@exquisite_ng" class="fab fa-tiktok"></a>
+                        <a href="https://twitter.com/exquisite_ng" class="fab fa-twitter"></a>
+                        <a href="https://facebook.com/exquisite_ng" class="fab fa-facebook-f"></a>
+                        <a href="https://instagram.com/exquisite_ng" class="fab fa-instagram"></a>
+                        <a href="https://whatsapp.com/exquisite_ng" class="fab fa-whatsapp"></a>
+                        <a href="https://pinterest.com/exquisite_ng" class="fab fa-pinterest"></a>
+                    </div>
+                    <h3 style="margin-top: 1rem;">Newsletter Love</h3>
+                    <form id="newsletter-form" action="https://getform.io/f/your-newsletter-id" method="POST">
+                        <input type="email" name="email" placeholder="Your Email" required>
+                        <button type="submit">Join the Exquisite Fam!</button>
+                        <div class="form-message"></div>
+                    </form>
+                </div>
+            </div>
+            <div class="back-to-top">
+                <a href="#">Back to Top ⬆️</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Initialize cart globally
+        let cart = JSON.parse(localStorage.getItem('cart')) || { items: [] };
+
+        // Update cart display (for cart icon)
+        function updateCartDisplay() {
+            let cartCount = document.getElementById('cart-count');
+            cartCount.textContent = cart.items.length;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Particle Animation
+            const canvas = document.getElementById('particles');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const particlesArray = [];
+            const numberOfParticles = 100;
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.size = Math.random() * 3 + 1;
+                    this.speedX = Math.random() * 1 - 0.5;
+                    this.speedY = Math.random() * 1 - 0.5;
+                    this.color = `rgba(${Math.random() * 255}, ${Math.random() * 255}, 255, 0.7)`;
+                }
+                update() {
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+                    if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                    if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+                }
+                draw() {
+                    ctx.fillStyle = this.color;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+
+            for (let i = 0; i < numberOfParticles; i++) {
+                particlesArray.push(new Particle());
+            }
+
+            function animateParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                for (let i = 0; i < particlesArray.length; i++) {
+                    particlesArray[i].update();
+                    particlesArray[i].draw();
+                }
+                requestAnimationFrame(animateParticles);
+            }
+            animateParticles();
+
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+
+            // Hero Carousel (simplified for single slide)
+            const slides = document.querySelectorAll('.hero-slide');
+            let currentSlide = 0;
+
+            function showSlide(index) {
+                slides.forEach((slide, i) => {
+                    slide.classList.remove('active');
+                    if (i === index) slide.classList.add('active');
+                });
+            }
+
+            showSlide(currentSlide);
+
+            // Header Shrink on Scroll
+            window.addEventListener('scroll', () => {
+                document.querySelector('header').classList.toggle('shrink', window.scrollY > 50);
+            });
+
+            // Section Fade-In Animation
+            const sections = document.querySelectorAll('.section');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) entry.target.classList.add('visible');
+                });
+            }, { threshold: 0.1 });
+            sections.forEach(section => observer.observe(section));
+
+            // Hamburger Menu
+            const nav = document.querySelector('nav');
+            const hamburger = document.querySelector('.hamburger');
+            const closeNav = document.querySelector('.close-nav');
+            const contentWrapper = document.querySelector('.content-wrapper');
+
+            hamburger.addEventListener('click', () => {
+                nav.classList.add('active');
+                contentWrapper.classList.add('nav-open');
+            });
+
+            closeNav.addEventListener('click', () => {
+                nav.classList.remove('active');
+                contentWrapper.classList.remove('nav-open');
+            });
+
+            nav.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    nav.classList.remove('active');
+                    contentWrapper.classList.remove('nav-open');
+                });
+            });
+
+            // Dark Mode Toggle
+            document.getElementById('dark-mode-toggle').addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+                localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+                document.getElementById('dark-mode-toggle').textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+            });
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+                document.getElementById('dark-mode-toggle').textContent = '☀️';
+            }
+
+            // Update cart count on page load
+            updateCartDisplay();
+
+            // Newsletter Form Submission
+            document.getElementById('newsletter-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const form = e.target;
+                const formMessage = form.querySelector('.form-message');
+                fetch(form.action, {
+                    method: 'POST',
+                    body: new FormData(form)
+                })
+                .then(response => {
+                    if (response.ok) {
+                        formMessage.innerHTML = '<p class="success">Thank you for joining the Exquisite Fam!</p>';
+                        form.reset();
+                        setTimeout(() => formMessage.innerHTML = '', 3000);
+                    } else {
+                        throw new Error('Submission failed');
+                    }
+                })
+                .catch(error => {
+                    formMessage.innerHTML = '<p class="error">Something went wrong. Please try again!</p>';
+                    console.error('Error:', error);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
