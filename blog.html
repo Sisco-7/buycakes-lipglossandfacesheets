@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exquisite - Blog</title>
+    <!-- Preload the first blog image -->
+    <link rel="preload" href="blog-image-1.jpg" as="image">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Social Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* CSS Variables for Colors (Same as Home Page) */
+        :root {
+            --bg-primary: #FFF5F8;
+            --bg-secondary: #FFE4E1;
+            --accent-primary: #FF1493;
+            --accent-secondary: #FF69B4;
+            --cosmic-gold: #D4AF37;
+            --text-primary: #1A1A1A;
+            --text-secondary: #4A4A4A;
+            --success: #00FF7F;
+            --error: #FF4040;
+            --footer-bg: #FFEBF0;
+        }
+        .dark-mode {
+            --bg-primary: #1A1A1A;
+            --bg-secondary: #2C2C2C;
+            --accent-primary: #FF1493;
+            --accent-secondary: #FF69B4;
+            --cosmic-gold: #D4AF37;
+            --text-primary: #FFFFFF;
+            --text-secondary: #D3D3D3;
+            --success: #00FF7F;
+            --error: #FF4040;
+            --footer-bg: #2C2C2C;
+        }
+
+        /* General Styles (Same as Home Page) */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Raleway', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            scroll-behavior: smooth;
+            position: relative;
+            overflow-x: hidden;
+        }
+        #particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(135deg, #1A1A1A, #2C2C2C);
+        }
+        #cart-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--success);
+            color: #FFFFFF;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            box-shadow: 0 0 10px var(--success);
+            z-index: 2000;
+            display: none;
+        }
+        .content-wrapper {
+            transition: filter 0.3s ease;
+        }
+        .content-wrapper.nav-open { filter: blur(3px); }
+
+        /* Header Styles (Same as Home Page) */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(255, 245, 248, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        header.shrink { transform: scale(0.98); }
+        .top-bar {
+            background: var(--accent-primary);
+            color: #FFFFFF;
+            text-align: center;
+            padding: 0.5rem;
+            font-size: 0.9rem;
+            text-shadow: 0 0 5px var(--accent-primary), 0 0 10px var(--accent-primary);
+        }
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            text-shadow: 0 0 10px var(--accent-primary);
+        }
+        .search-nav {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        .search-bar {
+            position: relative;
+            flex: 1;
+            max-width: 400px;
+        }
+        .search-bar input {
+            width: 100%;
+            padding: 0.5rem 2rem 0.5rem 1rem;
+            border: 1px solid var(--accent-secondary);
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--text-primary);
+            transition: box-shadow 0.3s;
+        }
+        .search-bar input:focus {
+            box-shadow: 0 0 10px var(--accent-primary);
+            outline: none;
+        }
+        .search-bar::after {
+            content: '🔍';
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+        nav { display: flex; gap: 1.5rem; position: relative; }
+        nav a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            padding: 0.2rem 0;
+            transition: color 0.3s, text-shadow 0.3s;
+        }
+        @media (min-width: 769px) {
+            nav a::before {
+                content: '';
+                position: absolute;
+                bottom: -2px;
+                left: 0;
+                width: 0;
+                height: 2px;
+                background: linear-gradient(90deg, var(--accent-primary), var(--cosmic-gold));
+                transition: width 0.4s ease;
+            }
+            nav a:hover::before { width: 100%; }
+            nav a:hover {
+                color: var(--cosmic-gold);
+                text-shadow: 0 0 10px var(--cosmic-gold);
+            }
+        }
+        .header-icons { display: flex; gap: 1rem; align-items: center; }
+        .cart-icon { position: relative; cursor: pointer; font-size: 1.2rem; color: var(--text-primary); }
+        .cart-icon:hover { color: var(--cosmic-gold); text-shadow: 0 0 10px var(--cosmic-gold); }
+        #cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--accent-primary);
+            color: #FFFFFF;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.7rem;
+            box-shadow: 0 0 5px var(--accent-primary);
+        }
+        #dark-mode-toggle { cursor: pointer; font-size: 1.2rem; color: var(--text-primary); }
+        #dark-mode-toggle:hover { color: var(--cosmic-gold); text-shadow: 0 0 10px var(--cosmic-gold); }
+        .hamburger { display: none; font-size: 1.5rem; cursor: pointer; color: var(--text-primary); }
+        .hamburger:hover { color: var(--cosmic-gold); text-shadow: 0 0 10px var(--cosmic-gold); }
+        .nav-header { display: none; }
+
+        /* Blog Section */
+        main { padding: 2rem; margin-top: 120px; }
+        .blog-section {
+            position: relative;
+            margin: 3rem 0;
+            background: var(--bg-secondary);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .blog-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .blog-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(255, 20, 147, 0.1), rgba(255, 215, 0, 0.1));
+            opacity: 0.5;
+            z-index: -1;
+            animation: auroraShift 10s infinite;
+        }
+        @keyframes auroraShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .blog-section h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--accent-primary);
+            text-shadow: 0 0 10px var(--cosmic-gold);
+            margin-bottom: 1rem;
+            animation: heartbeat 2s infinite;
+        }
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .blog-section .intro-text {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            animation: fadeIn 1s ease-in;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        .blog-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: left;
+            transition: transform 0.5s ease, box-shadow 0.5s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .blog-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 0 30px var(--cosmic-gold);
+        }
+        .blog-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.2) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.5s;
+            pointer-events: none;
+        }
+        .blog-card:hover::before { opacity: 1; }
+        .blog-card .image-wrapper {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+        }
+        .blog-card img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 5px;
+            transition: transform 0.3s;
+        }
+        .blog-card:hover img { transform: scale(1.05); }
+        .blog-card h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--accent-primary);
+            text-shadow: 0 0 5px var(--cosmic-gold);
+            margin: 1rem 0 0.5rem;
+        }
+        .blog-card .meta {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+        .blog-card p {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+        .blog-card button {
+            background: linear-gradient(45deg, var(--accent-primary), var(--cosmic-gold));
+            color: #FFFFFF;
+            border: none;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+            box-shadow: 0 0 10px var(--cosmic-gold);
+            transition: background 0.3s, box-shadow 0.3s, transform 0.3s;
+        }
+        .blog-card button:hover {
+            background: linear-gradient(45deg, var(--cosmic-gold), var(--accent-primary));
+            box-shadow: 0 0 20px var(--cosmic-gold);
+            transform: scale(1.05);
+        }
+
+        /* Blog Modal */
+        #blog-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            padding: 2rem;
+            border: 2px solid var(--cosmic-gold);
+            border-radius: 15px;
+            max-width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 0 30px var(--cosmic-gold);
+            z-index: 2000;
+            animation: shimmer 2s infinite;
+        }
+        @keyframes shimmer {
+            0% { box-shadow: 0 0 30px var(--cosmic-gold); }
+            50% { box-shadow: 0 0 50px var(--cosmic-gold); }
+            100% { box-shadow: 0 0 30px var(--cosmic-gold); }
+        }
+        #blog-modal h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--cosmic-gold);
+            text-shadow: 0 0 10px var(--cosmic-gold);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        #blog-modal img {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto 1rem;
+            display: block;
+            border-radius: 10px;
+            box-shadow: 0 0 15px var(--cosmic-gold);
+        }
+        #blog-modal .content { margin: 1rem 0; color: var(--text-primary); }
+        #blog-modal .meta {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        #blog-modal .social-share {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+        #blog-modal .social-share a, #blog-modal .social-share button {
+            font-size: 1.5rem;
+            color: var(--accent-primary);
+            padding: 0.5rem;
+            border-radius: 50%;
+            position: relative;
+            transition: transform 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+        }
+        #blog-modal .social-share a:hover, #blog-modal .social-share button:hover {
+            color: var(--cosmic-gold);
+            transform: scale(1.2) rotate(10deg);
+            box-shadow: 0 0 15px var(--cosmic-gold), 0 0 25px var(--accent-primary);
+            animation: pulseGlow 0.8s infinite alternate;
+        }
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 10px var(--cosmic-gold), 0 0 20px var(--accent-primary); }
+            100% { box-shadow: 0 0 20px var(--cosmic-gold), 0 0 30px var(--accent-primary); }
+        }
+        #blog-modal .comments-section {
+            margin-top: 2rem;
+        }
+        #blog-modal .comments-section h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--accent-primary);
+            text-shadow: 0 0 10px var(--cosmic-gold);
+            margin-bottom: 1rem;
+        }
+        #blog-modal .comments-section form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        #blog-modal .comments-section input,
+        #blog-modal .comments-section textarea {
+            padding: 0.5rem;
+            border: 1px solid var(--cosmic-gold);
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            transition: box-shadow 0.3s;
+        }
+        #blog-modal .comments-section input:focus,
+        #blog-modal .comments-section textarea:focus {
+            box-shadow: 0 0 10px var(--cosmic-gold);
+            outline: none;
+        }
+        #blog-modal .comments-section button {
+            background: linear-gradient(45deg, var(--accent-primary), var(--cosmic-gold));
+            color: #FFFFFF;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            border-radius: 10px;
+            box-shadow: 0 0 10px var(--cosmic-gold);
+            transition: background 0.3s, box-shadow 0.3s, transform 0.3s;
+        }
+        #blog-modal .comments-section button:hover {
+            background: linear-gradient(45deg, var(--cosmic-gold), var(--accent-primary));
+            box-shadow: 0 0 20px var(--cosmic-gold);
+            transform: scale(1.05);
+        }
+        #blog-modal .comments-list {
+            margin-top: 1rem;
+        }
+        #blog-modal .comment {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+        #blog-modal .comment::before {
+            content: '“';
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            font-size: 2rem;
+            color: var(--cosmic-gold);
+            opacity: 0.2;
+        }
+        #blog-modal .comment::after {
+            content: '”';
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            font-size: 2rem;
+            color: var(--cosmic-gold);
+            opacity: 0.2;
+        }
+        #blog-modal .comment p {
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+        #blog-modal .comment .author {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--cosmic-gold);
+            text-align: right;
+            text-shadow: 0 0 5px var(--cosmic-gold);
+        }
+        #blog-modal .close-modal {
+            background: linear-gradient(45deg, var(--accent-primary), var(--cosmic-gold));
+            color: #FFFFFF;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            border-radius: 10px;
+            box-shadow: 0 0 10px var(--cosmic-gold);
+            display: block;
+            margin: 2rem auto 0;
+            transition: background 0.3s, box-shadow 0.3s, transform 0.3s;
+        }
+        #blog-modal .close-modal:hover {
+            background: linear-gradient(45deg, var(--cosmic-gold), var(--accent-primary));
+            box-shadow: 0 0 20px var(--cosmic-gold);
+            transform: scale(1.05);
+        }
+
+        /* Pagination */
+        .pagination {
+            text-align: center;
+            margin-top: 2rem;
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .pagination a {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(45deg, var(--accent-primary), var(--cosmic-gold));
+            color: #FFFFFF;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 0 10px var(--cosmic-gold);
+            transition: background 0.3s, box-shadow 0.3s, transform 0.3s;
+        }
+        .pagination a:hover {
+            background: linear-gradient(45deg, var(--cosmic-gold), var(--accent-primary));
+            box-shadow: 0 0 20px var(--cosmic-gold);
+            transform: scale(1.05);
+        }
+        .pagination a.active {
+            background: var(--cosmic-gold);
+            box-shadow: 0 0 15px var(--cosmic-gold);
+            transform: scale(1.1);
+        }
+
+        /* Tags Section */
+        .blog-tags {
+            margin-top: 2rem;
+            text-align: center;
+        }
+        .blog-tags h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--accent-primary);
+            text-shadow: 0 0 10px var(--cosmic-gold);
+            margin-bottom: 1rem;
+        }
+        .blog-tags .tag {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            margin: 0.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+        }
+        .blog-tags .tag:hover {
+            background: linear-gradient(45deg, var(--accent-primary), var(--cosmic-gold));
+            color: #FFFFFF;
+            transform: scale(1.1);
+            box-shadow: 0 0 10px var(--cosmic-gold);
+        }
+        .blog-tags .tag.active {
+            background: var(--cosmic-gold);
+            color: #FFFFFF;
+            box-shadow: 0 0 15px var(--cosmic-gold);
+        }
+
+        /* Footer Styles (Same as Home Page) */
+        footer {
+            background: var(--footer-bg);
+            padding: 3rem 1rem;
+            position: relative;
+            border-top: 5px solid var(--cosmic-gold);
+            margin-top: 3rem;
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.2);
+        }
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, var(--accent-secondary), var(--cosmic-gold));
+            opacity: 0.1;
+            z-index: -1;
+        }
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(5px);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+        footer h3 {
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+            background: linear-gradient(to right, var(--accent-primary), var(--cosmic-gold));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+        footer p, footer a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin: 0.5rem 0;
+            transition: all 0.3s ease;
+        }
+        a:not(nav a):hover {
+            background: linear-gradient(to right, var(--accent-primary), var(--cosmic-gold));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px var(--cosmic-gold);
+            transform: scale(1.05);
+        }
+        footer p i { margin-right: 0.5rem; color: var(--accent-primary); }
+        footer form { display: flex; flex-direction: column; gap: 0.5rem; }
+        footer input, footer textarea {
+            padding: 0.5rem;
+            border: 1px solid var(--cosmic-gold);
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            transition: box-shadow 0.3s;
+        }
+        footer input:focus, footer textarea:focus {
+            box-shadow: 0 0 10px var(--cosmic-gold);
+            outline: none;
+        }
+        footer button {
+            background: linear-gradient(45deg, var(--accent-primary), var(--cosmic-gold));
+            color: #FFFFFF;
+            border: none;
+            padding: 0.5rem;
+            cursor: pointer;
+            border-radius: 5px;
+            box-shadow: 0 0 10px var(--cosmic-gold);
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+        footer button:hover {
+            background: linear-gradient(45deg, var(--cosmic-gold), var(--accent-primary));
+            box-shadow: 0 0 20px var(--cosmic-gold);
+        }
+        .form-message { text-align: center; margin-top: 0.5rem; }
+        .success { color: var(--success); text-shadow: 0 0 5px var(--success); }
+        .error { color: var(--error); text-shadow: 0 0 5px var(--error); }
+        .social-icons { display: flex; gap: 1rem; }
+        .social-icons a {
+            font-size: 1.8rem;
+            color: var(--text-secondary);
+            transition: transform 0.3s, color 0.3s, text-shadow 0.3s;
+        }
+        .social-icons a:hover {
+            color: var(--cosmic-gold);
+            transform: scale(1.2);
+            text-shadow: 0 0 10px var(--cosmic-gold);
+        }
+        .back-to-top { text-align: center; margin-top: 2rem; }
+        .back-to-top a {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(45deg, var(--accent-primary), var(--cosmic-gold));
+            color: #FFFFFF;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 0 10px var(--cosmic-gold);
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+        .back-to-top a:hover {
+            background: linear-gradient(45deg, var(--cosmic-gold), var(--accent-primary));
+            box-shadow: 0 0 20px var(--cosmic-gold);
+        }
+
+        /* Responsive Design (Same as Home Page) */
+        @media (max-width: 1200px) {
+            .main-header { padding: 1rem 1.5rem; }
+            .logo { font-size: 2rem; }
+            .search-bar { max-width: 350px; }
+        }
+        @media (max-width: 768px) {
+            .main-header { flex-wrap: wrap; gap: 0.5rem; padding: 0.5rem 1rem; }
+            .logo { font-size: 1.5rem; }
+            .search-nav { width: 100%; justify-content: space-between; }
+            nav {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: -70%;
+                width: 70%;
+                height: 100vh;
+                background: linear-gradient(135deg, var(--accent-primary), var(--cosmic-gold));
+                padding: 2rem 1rem;
+                box-shadow: 2px 0 15px rgba(0, 0, 0, 0.3);
+                transition: left 0.3s ease;
+                z-index: 1001;
+                overflow-y: auto;
+            }
+            nav.active { display: block; left: 0; }
+            .nav-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+            nav .nav-header h3 { font-size: 1.5rem; font-weight: 700; color: #FFFFFF; text-shadow: 0 0 10px var(--cosmic-gold); }
+            nav .close-nav { font-size: 1.5rem; color: #FFFFFF; cursor: pointer; transition: transform 0.3s, text-shadow 0.3s; }
+            nav .close-nav:hover { transform: rotate(90deg); text-shadow: 0 0 10px var(--cosmic-gold); }
+            nav a {
+                display: block;
+                margin: 1.5rem 0;
+                font-size: 1.2rem;
+                color: #FFFFFF;
+                text-shadow: 0 0 5px var(--cosmic-gold);
+                padding: 0.5rem 1rem;
+                border-radius: 5px;
+                background: rgba(82, 82, 80, 0.16);
+                transition: transform 0.3s, background 0.3s, text-shadow 0.3s;
+                opacity: 0;
+                transform: translateX(-20px);
+                animation: slideInNav 0.5s forwards;
+                animation-delay: calc(0.1s * var(--nav-index));
+            }
+            @keyframes slideInNav { to { opacity: 1; transform: translateX(0); } }
+            nav a:hover { background: rgba(255, 255, 255, 0.2); transform: translateX(10px); text-shadow: 0 0 15px var(--cosmic-gold); }
+            .hamburger { display: block; }
+            main { padding: 1rem; margin-top: 220px; }
+            .blog-section { padding: 1.5rem; }
+            .blog-section h1 { font-size: 1.8rem; }
+            .blog-section .intro-text { font-size: 0.9rem; }
+            .blog-grid { grid-template-columns: 1fr; }
+            #blog-modal { width: 100%; height: 100%; top: 0; left: 0; transform: none; border: none; padding: 1.5rem; border-radius: 0; }
+            #blog-modal h2 { font-size: 1.5rem; }
+            #blog-modal .comments-section h3 { font-size: 1.2rem; }
+        }
+        @media (max-width: 480px) {
+            .blog-section h1 { font-size: 1.5rem; }
+            .blog-card { padding: 1rem; }
+            .blog-card h2 { font-size: 1.2rem; }
+            .blog-card .meta { font-size: 0.8rem; }
+            .blog-card p { font-size: 0.9rem; }
+            .blog-tags h3 { font-size: 1.2rem; }
+            .blog-tags .tag { font-size: 0.8rem; padding: 0.4rem 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Cosmic Particle Background -->
+    <canvas id="particles" width="412" height="915"></canvas>
+
+    <!-- Notification Area -->
+    <div id="cart-notification"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="top-bar">✨ Free Shipping on Orders Over ₦10,000! ✨</div>
+        <div class="main-header">
+            <div class="logo">Exquisite</div>
+            <div class="search-nav">
+                <div class="search-bar">
+                    <input type="text" placeholder="Search blog posts..." id="blog-search">
+                </div>
+                <span class="hamburger">☰</span>
+                <nav>
+                    <div class="nav-header">
+                        <h3>Exquisite</h3>
+                        <span class="close-nav">✖</span>
+                    </div>
+                    <a href="index.html" style="--nav-index: 1;">Home</a>
+                    <a href="about.html" style="--nav-index: 2;">About Us</a>
+                    <a href="shop.html" style="--nav-index: 3;">Shop</a>
+                    <a href="recipes.html" style="--nav-index: 4;">Recipes</a>
+                    <a href="care-tips.html" style="--nav-index: 5;">Care & Tips</a>
+                    <a href="blog.html" style="--nav-index: 6;">Blog</a>
+                    <a href="community.html" style="--nav-index: 7;">Community</a>
+                    <a href="contact.html" style="--nav-index: 8;">Contact Us</a>
+                </nav>
+            </div>
+            <div class="header-icons">
+                <div class="cart-icon">🛒 <span id="cart-count">0</span></div>
+                <span id="dark-mode-toggle">🌙</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Content Wrapper -->
+    <div class="content-wrapper">
+        <!-- Main Content -->
+        <main>
+            <section class="blog-section">
+                <h1>Exquisite Blog</h1>
+                <p class="intro-text">Explore the magic of Exquisite through stories, tips, and inspiration from our Lagos kitchen. From baking adventures to beauty secrets, we’ve got you covered—share your thoughts and join the vibe!</p>
+                <div class="blog-grid" id="blog-grid">
+                    <!-- Blog posts will be dynamically inserted here -->
+                </div>
+                <div class="pagination" id="pagination">
+                    <!-- Pagination will be dynamically generated -->
+                </div>
+                <div class="blog-tags">
+                    <h3>Explore by Tags</h3>
+                    <a href="#" class="tag" data-tag="baking">Baking</a>
+                    <a href="#" class="tag" data-tag="beauty">Beauty</a>
+                    <a href="#" class="tag" data-tag="skincare">Skincare</a>
+                    <a href="#" class="tag" data-tag="recipes">Recipes</a>
+                    <a href="#" class="tag" data-tag="family">Family</a>
+                </div>
+            </section>
+        </main>
+
+        <!-- Blog Modal -->
+        <div id="blog-modal">
+            <div id="blog-content"></div>
+            <button class="close-modal">Close</button>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <div class="footer-content">
+                <div>
+                    <h3>Exquisite</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> 12 Exquisite Lane, Lagos State, Nigeria</p>
+                    <p><i class="fas fa-globe"></i> We ship across Nigeria!</p>
+                    <p><i class="fas fa-phone-alt"></i> +234 801 234 5678</p>
+                    <p><i class="fas fa-envelope"></i> hello@exquisite.ng</p>
+                    <p><i class="fas fa-clock"></i> Mon-Fri: 9am-6pm, Sat: 10am-4pm (WAT)</p>
+                </div>
+                <div>
+                    <h3>Quick Links</h3>
+                    <p><a href="index.html">Home</a></p>
+                    <p><a href="shop.html">Shop</a></p>
+                    <p><a href="recipes.html">Recipes</a></p>
+                    <p><a href="care-tips.html">Care & Tips</a></p>
+                    <p><a href="blog.html">Blog</a></p>
+                    <p><a href="community.html">Community</a></p>
+                    <p><a href="contact.html">Contact Us</a></p>
+                </div>
+                <div>
+                    <h3>Explore More</h3>
+                    <p><a href="#">Flavor Quiz</a></p>
+                    <p><a href="#">Lookbook</a></p>
+                    <p><a href="#">Customer Stories</a></p>
+                    <p><a href="#">Newsletter Signup</a></p>
+                </div>
+                <div>
+                    <h3>Follow Us</h3>
+                    <div class="social-icons">
+                        <a href="https://tiktok.com/@exquisite_ng" class="fab fa-tiktok"></a>
+                        <a href="https://twitter.com/exquisite_ng" class="fab fa-twitter"></a>
+                        <a href="https://facebook.com/exquisite_ng" class="fab fa-facebook-f"></a>
+                        <a href="https://instagram.com/exquisite_ng" class="fab fa-instagram"></a>
+                        <a href="https://whatsapp.com/exquisite_ng" class="fab fa-whatsapp"></a>
+                        <a href="https://pinterest.com/exquisite_ng" class="fab fa-pinterest"></a>
+                    </div>
+                    <h3 style="margin-top: 1rem;">Newsletter Love</h3>
+                    <form id="newsletter-form" action="https://getform.io/f/your-newsletter-id" method="POST">
+                        <input type="email" name="email" placeholder="Your Email" required>
+                        <button type="submit">Join the Exquisite Fam!</button>
+                        <div class="form-message"></div>
+                    </form>
+                </div>
+            </div>
+            <div class="back-to-top">
+                <a href="#">Back to Top ⬆️</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Initialize cart and blog posts
+        let cart = JSON.parse(localStorage.getItem('cart')) || { items: [] };
+        const blogPosts = {
+            // Page 1
+            'post1-1': {
+                title: '5 Tips for Baking the Perfect Cake',
+                image: '5 Tips for Baking the Perfect Cake.jpg',
+                date: 'March 25, 2025',
+                author: 'Chichi',
+                excerpt: 'Impress with a cake that’s as gorgeous as it is delicious.',
+                content: 'At Exquisite, baking is an art form we’ve perfected over years in our Lagos kitchen. Here are five essential tips to elevate your cake game: <br>1. <strong>Use Room-Temperature Ingredients</strong>: Eggs, butter, and milk blend smoother at room temp, ensuring a velvety batter. <br>2. <strong>Measure Precisely</strong>: Too much flour can dry out your cake—use a scale for accuracy. <br>3. <strong>Don’t Overmix</strong>: Stop once the batter’s combined to keep it light and fluffy. <br>4. <strong>Preheat Properly</strong>: Give your oven 20-30 minutes to stabilize for even baking. <br>5. <strong>Test for Doneness</strong>: A toothpick should come out clean, but don’t overbake—moisture is key! Try these with our signature Exquisite Vanilla Essence for a flavor pop that’ll have everyone asking for seconds.',
+                tags: ['baking', 'recipes']
+            },
+            'post1-2': {
+                title: 'How to Layer Lip Gloss Like a Pro',
+                image: 'How to Layer Lip Gloss Like a Pro.jpg',
+                date: 'March 20, 2025',
+                author: 'Temi',
+                excerpt: 'Take your lip game to the next level with our guide.',
+                content: 'Exquisite Lip Gloss is all about shine and versatility straight from Lagos! Here’s how to layer like a pro: Start with a nude base—our Rose Glow gloss adds a subtle shimmer. Then, dab Berry Shine at the center for a bold pop that catches the light. For extra drama, finish with a touch of Glitter Dust gloss—it’s non-sticky and lasts all day. Pro tip: Exfoliate with a sugar scrub first (DIY with honey and brown sugar) to keep lips smooth. Whether you’re going subtle for work or bold for a night out, layering lets you customize your vibe. Our glosses are lightweight, hydrating, and Lagos-approved—shine on!',
+                tags: ['beauty']
+            },
+            'post1-3': {
+                title: 'Why Face Sheets Are Your Skin’s Best Friend',
+                image: 'Why Face Sheets Are Your Skin’s Best Friend.jpg',
+                date: 'March 15, 2025',
+                author: 'Ada',
+                excerpt: 'Glow in just 15 minutes with Exquisite Face Sheets.',
+                content: 'In Lagos’ humid hustle, Exquisite Face Sheets are a skincare must-have. Here’s why they’re your skin’s BFF: <br>- <strong>Honey Calm</strong>: Packed with natural honey, it soothes redness and hydrates dry patches—perfect post-sunshine. <br>- <strong>Aloe Soothe</strong>: Cooling and gentle, it’s a lifesaver for sensitive skin or after a long day. <br>- <strong>Rose Hydrate</strong>: Infused with rose water, it plumps and brightens for that dewy glow. Just 15 minutes on clean skin delivers a burst of moisture and calm—no mess, no fuss. Store them in the fridge for an extra refreshing treat. Self-care doesn’t get easier—or more radiant—than this!',
+                tags: ['skincare']
+            },
+            'post1-4': {
+                title: 'Spring Recipe: Lemon Blossom Cupcakes',
+                image: 'Spring Recipe Lemon Blossom Cupcakes.jpg',
+                date: 'March 10, 2025',
+                author: 'Chichi',
+                excerpt: 'Brighten your day with zesty cupcakes.',
+                content: 'Spring in Lagos calls for something light and zesty, and our Lemon Blossom Cupcakes deliver! Here’s the scoop: Start with a fluffy vanilla batter spiked with fresh lemon zest—grate two medium lemons for max flavor. Add a tablespoon of Exquisite Lemon Extract to amp up the citrus kick. Bake at 180°C for 18-20 minutes until golden. For the frosting, whip buttercream with a splash of lemon juice and top with edible flowers (find them at local markets!). These cupcakes are tangy, moist, and perfect for picnics or tea time. Our Lagos kitchen swears by this recipe—try it and let the sunshine in!',
+                tags: ['baking', 'recipes']
+            },
+            // Page 2
+            'post2-1': {
+                title: 'DIY Sugar Scrubs for Silky Skin',
+                image: 'DIY Sugar Scrubs for Silky Skin.jpg',
+                date: 'March 5, 2025',
+                author: 'Temi',
+                excerpt: 'Exfoliate naturally with these easy recipes.',
+                content: 'Exquisite’s all about natural beauty, and these DIY sugar scrubs are a Lagos kitchen fave! Here’s how: <br>1. <strong>Basic Bliss</strong>: Mix 1 cup brown sugar, ½ cup coconut oil, and a teaspoon of honey—smooth and sweet! <br>2. <strong>Citrus Zing</strong>: Combine 1 cup white sugar, ⅓ cup olive oil, and 2 tablespoons lemon zest for a refreshing glow. <br>3. <strong>Lavender Luxe</strong>: Blend 1 cup sugar, ½ cup almond oil, and a few drops of lavender essential oil—pure relaxation. Rub gently in circular motions, rinse, and feel the silkiness. Store in a jar for up to a month. Pair with our Exquisite Body Cream for next-level hydration!',
+                tags: ['skincare', 'recipes']
+            },
+            'post2-2': {
+                title: 'The Ultimate Chocolate Lava Cake',
+                image: 'The Ultimate Chocolate Lava Cake.jpg',
+                date: 'March 1, 2025',
+                author: 'Chichi',
+                excerpt: 'Indulge in this gooey, dreamy dessert.',
+                content: 'Our Chocolate Lava Cake is a Lagos dessert dream! Melt 200g dark chocolate with 100g butter over low heat. Whisk in ¾ cup sugar, 3 eggs, and a pinch of salt until silky. Fold in ½ cup flour and a teaspoon of Exquisite Cocoa Powder for depth. Pour into greased ramekins, bake at 200°C for 10-12 minutes—centers should stay molten. Serve warm with a scoop of vanilla ice cream or a dusting of powdered sugar. This rich, gooey treat is perfect for date night or a solo indulgence. Our kitchen tip: Don’t overbake—timing is everything for that lava flow!',
+                tags: ['baking', 'recipes']
+            },
+            'post2-3': {
+                title: 'Mastering the No-Makeup Makeup Look',
+                image: 'Mastering the No-Makeup Makeup Look.jpg',
+                date: 'February 25, 2025',
+                author: 'Ada',
+                excerpt: 'Glow naturally with Exquisite products.',
+                content: 'The no-makeup makeup look is a Lagos beauty staple, and Exquisite makes it effortless! Start with clean, moisturized skin—our Rose Hydrate Face Sheet preps you perfectly. Dab on a lightweight BB cream (try a local fave) for even tone. Add a swipe of Exquisite Rose Glow Lip Gloss for a natural flush—its sheer shine is everything. Curl lashes, skip heavy mascara, and groom brows with a clear gel. Finish with a spritz of rose water for that dewy vibe. It’s subtle, fresh, and perfect for humid days or quick errands. Glow like you woke up flawless—Exquisite style!',
+                tags: ['beauty']
+            },
+            'post2-4': {
+                title: 'Family Baking: Cookie Decorating Fun',
+                image: 'Family Baking Cookie Decorating Fun.jpg',
+                date: 'February 20, 2025',
+                author: 'Temi',
+                excerpt: 'Create sweet memories with the kids.',
+                content: 'Baking with family is pure joy in our Lagos kitchen! For cookie decorating fun: Mix 2 cups flour, ¾ cup sugar, 1 egg, and ½ cup butter into a soft dough—add a teaspoon of Exquisite Vanilla Essence for warmth. Roll out, cut into shapes (stars, hearts!), and bake at 180°C for 10-12 minutes. Cool, then let the kids loose with icing (mix powdered sugar and water) and sprinkles. Pro tip: Use food coloring for vibrant designs! It’s messy, loud, and full of laughs—perfect for weekends or holidays. These cookies taste as good as the memories you’ll make.',
+                tags: ['baking', 'family']
+            },
+            // Page 3
+            'post3-1': {
+                title: 'The Science of Scented Lip Gloss',
+                image: 'The Science of Scented Lip Gloss.jpg',
+                date: 'February 15, 2025',
+                author: 'Ada',
+                excerpt: 'Why our glosses smell as good as they shine.',
+                content: 'Exquisite’s scented lip glosses are a sensory delight, crafted in Lagos with love! The science? We blend natural oils like jojoba and sweet almond for hydration, then layer in food-grade flavorings—think vanilla bean or ripe mango. A touch of essential oils (safely diluted!) adds aroma without irritation. Our Rose Glow gloss, for instance, uses rose otto for a subtle floral hit that lingers. The shine comes from a glossy polymer that’s non-sticky, reflecting light for that Exquisite glow. It’s chemistry meets beauty—apply and let your lips steal the show!',
+                tags: ['beauty']
+            },
+            'post3-2': {
+                title: 'Winter Skincare: Beat the Dry Spell',
+                image: 'Winter Skincare Beat the Dry Spell.jpg',
+                date: 'February 10, 2025',
+                author: 'Chichi',
+                excerpt: 'Keep your skin hydrated all season.',
+                content: 'Lagos winters can dry out even the oiliest skin—here’s how to fight back! Start with our Rose Hydrate Face Sheet twice a week—its rose water and glycerin lock in moisture for hours. Follow with a thick layer of Exquisite Body Cream (shea butter base) on elbows, knees, and hands. DIY tip: Mix 1 tablespoon honey, 2 teaspoons yogurt, and a drop of olive oil for a hydrating mask—leave on for 10 minutes, rinse, and glow. Avoid hot showers (tough, we know!) to keep natural oils intact. Stay dewy and radiant, no matter the weather!',
+                tags: ['skincare']
+            },
+            'post3-3': {
+                title: 'History of Red Velvet: A Sweet Tale',
+                image: 'History of Red Velvet A Sweet Tale.jpg',
+                date: 'February 5, 2025',
+                author: 'Temi',
+                excerpt: 'Uncover the story of this classic cake.',
+                content: 'Red Velvet’s a star in our Lagos kitchen, but its roots go deep! Born in the U.S. during the Victorian era, it got its hue from natural cocoa reacting with acidic buttermilk—red without dye! Wartime bakers stretched rations with beet juice for color, adding earthy sweetness. Today, we use a touch of red food coloring and Exquisite Cocoa Powder for that iconic look and rich taste. Cream cheese frosting seals the deal—tangy, smooth, and oh-so-good. It’s a timeless treat we’ve made our own—bake it and taste history!',
+                tags: ['baking']
+            },
+            'post3-4': {
+                title: 'Quick Breakfast Muffins for Busy Mornings',
+                image: 'Quick Breakfast Muffins for Busy Mornings.jpg',
+                date: 'February 1, 2025',
+                author: 'Ada',
+                excerpt: 'Start your day with a tasty boost.',
+                content: 'Lagos mornings are hectic, but these muffins save the day! Mix 2 cups flour, ½ cup sugar, 1 tablespoon baking powder, and a pinch of salt. Stir in 1 cup milk, 1 egg, ¼ cup melted butter, and a handful of chopped nuts or dried fruit—try Exquisite Almonds for crunch. Spoon into a muffin tin, bake at 190°C for 15-18 minutes. They’re golden, fluffy, and ready to grab-and-go. Make a batch Sunday night, and you’re set for the week. Pair with tea or coffee for a breakfast that fuels your hustle!',
+                tags: ['recipes', 'baking']
+            }
+        };
+
+        // Sample comments (stored locally for demo purposes)
+        let comments = JSON.parse(localStorage.getItem('blogComments')) || {};
+
+        // Pagination settings
+        const postsPerPage = 4;
+        let currentPage = 1;
+
+        // Update cart display
+        function updateCartDisplay() {
+            document.getElementById('cart-count').textContent = cart.items.length;
+        }
+
+        // Show blog modal
+        function showBlog(blogKey) {
+            const blog = blogPosts[blogKey];
+            if (!blog) return; // Exit if blogKey is invalid
+            const modal = document.getElementById('blog-modal');
+            const content = document.getElementById('blog-content');
+            const postComments = comments[blogKey] || [];
+            const url = `${window.location.origin}${window.location.pathname}?post=${blogKey}`;
+
+            content.innerHTML = `
+                <h2>${blog.title}</h2>
+                <img src="${blog.image}" alt="${blog.title}" loading="lazy">
+                <div class="meta">Posted on ${blog.date} by ${blog.author}</div>
+                <div class="content">${blog.content}</div>
+                <div class="social-share">
+                    <a href="https://wa.me/?text=${encodeURIComponent(blog.title + ' - ' + blog.excerpt + ' ' + url)}" target="_blank" class="fab fa-whatsapp" title="Share on WhatsApp"></a>
+                    <a href="https://www.tiktok.com/share?url=${encodeURIComponent(url)}&title=${encodeURIComponent(blog.title)}" target="_blank" class="fab fa-tiktok" title="Share on TikTok"></a>
+                    <a href="https://www.instagram.com/?url=${encodeURIComponent(url)}" target="_blank" class="fab fa-instagram" title="Share on Instagram"></a>
+                    <a href="https://twitter.com/share?url=${encodeURIComponent(url)}&text=${encodeURIComponent(blog.title + ' - ' + blog.excerpt)}" target="_blank" class="fab fa-twitter" title="Share on Twitter"></a>
+                    <a href="https://facebook.com/sharer.php?u=${encodeURIComponent(url)}" target="_blank" class="fab fa-facebook-f" title="Share on Facebook"></a>
+                    <a href="https://pinterest.com/pin/create/button/?url=${encodeURIComponent(url)}&media=${encodeURIComponent(blog.image)}&description=${encodeURIComponent(blog.title + ' - ' + blog.excerpt)}" target="_blank" class="fab fa-pinterest" title="Share on Pinterest"></a>
+                    <button id="copy-link" title="Copy Link to Clipboard"><i class="fas fa-copy"></i></button>
+                </div>
+                <div class="comments-section">
+                    <h3>Comments (${postComments.length})</h3>
+                    <div class="comments-list">
+                        ${postComments.length === 0 ? '<p>No comments yet. Be the first!</p>' : 
+                        postComments.map(comment => `
+                            <div class="comment">
+                                <p>${comment.text}</p>
+                                <p class="author">— ${comment.name}, ${comment.date}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <form id="comment-form" data-blog="${blogKey}">
+                        <input type="text" name="name" placeholder="Your Name" required>
+                        <textarea name="comment" placeholder="Your Comment" required></textarea>
+                        <button type="submit">Post Comment</button>
+                    </form>
+                    <div class="form-message"></div>
+                </div>
+            `;
+            modal.style.display = 'block';
+
+            // Update URL without reloading
+            window.history.pushState({}, document.title, `${window.location.pathname}?post=${blogKey}`);
+
+            // Copy to Clipboard functionality
+            document.getElementById('copy-link').addEventListener('click', () => {
+                navigator.clipboard.writeText(url).then(() => {
+                    const notification = document.getElementById('cart-notification');
+                    notification.textContent = 'Link copied to clipboard!';
+                    notification.style.display = 'block';
+                    setTimeout(() => notification.style.display = 'none', 2000);
+                });
+            });
+        }
+
+        // Render blog grid with pagination and tag filter
+        function renderBlogGrid(searchTerm = '', tagFilter = '') {
+            const grid = document.getElementById('blog-grid');
+            grid.innerHTML = '';
+            const allPosts = Object.keys(blogPosts).filter(key => {
+                const post = blogPosts[key];
+                return (searchTerm === '' || post.title.toLowerCase().includes(searchTerm) || post.excerpt.toLowerCase().includes(searchTerm)) &&
+                       (tagFilter === '' || post.tags.includes(tagFilter));
+            });
+            const totalPages = Math.ceil(allPosts.length / postsPerPage);
+            const startIndex = (currentPage - 1) * postsPerPage;
+            const endIndex = startIndex + postsPerPage;
+            const currentPosts = allPosts.slice(startIndex, endIndex);
+
+            currentPosts.forEach(key => {
+                const post = blogPosts[key];
+                grid.innerHTML += `
+                    <div class="blog-card" data-blog="${key}">
+                        <div class="image-wrapper">
+                            <img src="${post.image}" alt="${post.title}" loading="lazy">
+                        </div>
+                        <h2>${post.title}</h2>
+                        <p class="meta">Posted on ${post.date} by ${post.author}</p>
+                        <p>${post.excerpt}</p>
+                        <button data-blog="${key}">Read More</button>
+                    </div>
+                `;
+            });
+
+            document.querySelectorAll('.blog-card').forEach(card => {
+                card.addEventListener('click', () => showBlog(card.getAttribute('data-blog')));
+            });
+
+            // Render pagination
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = '';
+            for (let i = 1; i <= totalPages; i++) {
+                pagination.innerHTML += `<a href="#" class="${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</a>`;
+            }
+            pagination.innerHTML += `<a href="#" id="next-page">Next</a>`;
+            document.querySelectorAll('.pagination a').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (link.id === 'next-page') {
+                        if (currentPage < totalPages) currentPage++;
+                    } else {
+                        currentPage = parseInt(link.getAttribute('data-page'));
+                    }
+                    renderBlogGrid(searchTerm, tagFilter);
+                });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Particle Animation
+            const canvas = document.getElementById('particles');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const particlesArray = [];
+            const numberOfParticles = 100;
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.size = Math.random() * 3 + 1;
+                    this.speedX = Math.random() * 1 - 0.5;
+                    this.speedY = Math.random() * 1 - 0.5;
+                    this.color = `rgba(${Math.random() * 255}, ${Math.random() * 255}, 255, 0.7)`;
+                }
+                update() {
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+                    if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                    if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+                }
+                draw() {
+                    ctx.fillStyle = this.color;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+
+            for (let i = 0; i < numberOfParticles; i++) {
+                particlesArray.push(new Particle());
+            }
+
+            function animateParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                for (let i = 0; i < particlesArray.length; i++) {
+                    particlesArray[i].update();
+                    particlesArray[i].draw();
+                }
+                requestAnimationFrame(animateParticles);
+            }
+            animateParticles();
+
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+
+            // Header Shrink on Scroll
+            window.addEventListener('scroll', () => {
+                document.querySelector('header').classList.toggle('shrink', window.scrollY > 50);
+            });
+
+            // Section Fade-In Animation
+            const sections = document.querySelectorAll('.blog-section');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) entry.target.classList.add('visible');
+                });
+            }, { threshold: 0.1 });
+            sections.forEach(section => observer.observe(section));
+
+            // Hamburger Menu
+            const nav = document.querySelector('nav');
+            const hamburger = document.querySelector('.hamburger');
+            const closeNav = document.querySelector('.close-nav');
+            const contentWrapper = document.querySelector('.content-wrapper');
+
+            hamburger.addEventListener('click', () => {
+                nav.classList.add('active');
+                contentWrapper.classList.add('nav-open');
+            });
+
+            closeNav.addEventListener('click', () => {
+                nav.classList.remove('active');
+                contentWrapper.classList.remove('nav-open');
+            });
+
+            nav.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    nav.classList.remove('active');
+                    contentWrapper.classList.remove('nav-open');
+                });
+            });
+
+            // Dark Mode Toggle
+            document.getElementById('dark-mode-toggle').addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+                localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+                document.getElementById('dark-mode-toggle').textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+            });
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+                document.getElementById('dark-mode-toggle').textContent = '☀️';
+            }
+
+            // Blog Search
+            document.getElementById('blog-search').addEventListener('input', (e) => {
+                currentPage = 1; // Reset to page 1 on search
+                renderBlogGrid(e.target.value.toLowerCase(), document.querySelector('.blog-tags .tag.active')?.getAttribute('data-tag') || '');
+            });
+
+            // Tag Filter
+            document.querySelectorAll('.blog-tags .tag').forEach(tag => {
+                tag.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    document.querySelectorAll('.blog-tags .tag').forEach(t => t.classList.remove('active'));
+                    tag.classList.add('active');
+                    currentPage = 1; // Reset to page 1 on tag change
+                    renderBlogGrid(document.getElementById('blog-search').value.toLowerCase(), tag.getAttribute('data-tag'));
+                });
+            });
+
+            // Initial Blog Grid Render
+            renderBlogGrid();
+
+            // Modal Close
+            document.querySelector('#blog-modal .close-modal').addEventListener('click', () => {
+                document.getElementById('blog-modal').style.display = 'none';
+                window.history.pushState({}, document.title, window.location.pathname);
+            });
+
+            // Comment Form Submission
+            document.getElementById('blog-modal').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const form = e.target;
+                const blogKey = form.getAttribute('data-blog');
+                const name = form.querySelector('input[name="name"]').value;
+                const text = form.querySelector('textarea[name="comment"]').value;
+                const date = new Date().toLocaleDateString();
+
+                if (!comments[blogKey]) comments[blogKey] = [];
+                comments[blogKey].push({ name, text, date });
+                localStorage.setItem('blogComments', JSON.stringify(comments));
+
+                const notification = document.getElementById('cart-notification');
+                notification.textContent = 'Comment posted successfully!';
+                notification.style.display = 'block';
+                setTimeout(() => notification.style.display = 'none', 2000);
+
+                showBlog(blogKey); // Refresh modal with new comment
+            });
+
+            // Newsletter Form Submission
+            document.getElementById('newsletter-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const form = e.target;
+                fetch(form.action, {
+                    method: 'POST',
+                    body: new FormData(form)
+                })
+                .then(response => {
+                    if (response.ok) {
+                        form.nextElementSibling.innerHTML = '<p class="success">Thanks for joining the Exquisite Fam!</p>';
+                        form.reset();
+                        setTimeout(() => form.nextElementSibling.innerHTML = '', 3000);
+                    } else {
+                        throw new Error('Submission failed');
+                    }
+                })
+                .catch(error => {
+                    form.nextElementSibling.innerHTML = '<p class="error">Oops! Something went wrong. Try again.</p>';
+                    console.error('Error:', error);
+                });
+            });
+
+            // Initial Cart Display
+            updateCartDisplay();
+
+            // Check URL for post parameter and load blog if present
+            const urlParams = new URLSearchParams(window.location.search);
+            const postId = urlParams.get('post');
+            if (postId && blogPosts[postId]) {
+                showBlog(postId);
+            }
+        });
+    </script>
+</body>
+</html>
